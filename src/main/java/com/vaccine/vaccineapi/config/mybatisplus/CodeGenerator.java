@@ -17,7 +17,7 @@ import java.util.List;
  **/
 public class CodeGenerator {
 
-    public static final String[] TABLE_ARR = new String[] { "v_user", "", "v_baby", "", "", "", "", "", "", "", "", "", "", "" };
+    public static final String[] TABLE_ARR = new String[] { "v_user", "", "v_baby", "v_vaccine_scheme_base", "", "", "", "", "", "", "", "", "", "" };
 
     /**
      * <p>
@@ -53,11 +53,11 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/vaccine?useUnicode=true&characterEncoding=utf8&useSSL=false");
+        dsc.setUrl("jdbc:mysql://rm-2ze165d0nn3703islo.mysql.rds.aliyuncs.com:3306/vaccine?useUnicode=true&characterEncoding=utf8&useSSL=false");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("123456");
+        dsc.setUsername("vaccine");
+        dsc.setPassword("ZgPBqTL^OAP");
         mpg.setDataSource(dsc);
 
         // 包配置

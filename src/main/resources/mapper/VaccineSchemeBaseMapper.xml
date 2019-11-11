@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vaccine.vaccineapi.mapper.VaccineSchemeBaseMapper">
+
+
+    <select id="getSchemeBase" resultType="Map">
+        select vd.name vaccine_name, vsb.vaccine_detail_id, vsb.vaccine_times_id, vsb.status, vsb.scheme_type
+        from v_vaccine_scheme_base vsb
+        LEFT JOIN v_vaccine_detail vd on vd.id=vsb.vaccine_detail_id
+        LEFT JOIN v_vaccine_times vt on vt.id=vsb.vaccine_times_id
+        where vsb.scheme_type=#{schemeType}
+    </select>
+
+
+</mapper>
