@@ -1,11 +1,11 @@
 package com.vaccine.vaccineapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vaccine.vaccineapi.domain.GetSchemeBaseDTO;
 import com.vaccine.vaccineapi.entity.VaccineSchemeBase;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -22,6 +22,6 @@ public interface VaccineSchemeBaseMapper extends BaseMapper<VaccineSchemeBase> {
      * @param schemeType
      * @return
      */
-    List<Map<String, Object>> getSchemeBase(@Param("schemeType") Integer schemeType);
+    List<GetSchemeBaseDTO> getSchemeBase(@Param("schemeType") Integer schemeType);
 
 }

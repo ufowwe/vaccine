@@ -2,9 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vaccine.vaccineapi.mapper.VaccineSchemeBaseMapper">
 
+    <resultMap type="com.vaccine.vaccineapi.domain.GetSchemeBaseDTO" id="getSchemeBaseDTO">
+        <result property="vaccineName" column="vaccine_name"/>
+        <result property="vaccineDetailId" column="vaccine_detail_id"/>
+        <result property="vaccineTimesId" column="vaccine_times_id"/>
+        <result property="status" column="status"/>
+        <result property="schemeType" column="scheme_type"/>
+        <result property="monthNumS" column="month_num_s"/>
+        <result property="monthNumE" column="month_num_e"/>
+    </resultMap>
 
-    <select id="getSchemeBase" resultType="Map">
-        select vd.name vaccine_name, vsb.vaccine_detail_id, vsb.vaccine_times_id, vsb.status, vsb.scheme_type
+    <select id="getSchemeBase" resultMap="getSchemeBaseDTO">
+        select vd.name vaccine_name, vsb.vaccine_detail_id, vsb.vaccine_times_id, vsb.status, vsb.scheme_type,
+            vt.month_num_s, vt.month_num_e
         from v_vaccine_scheme_base vsb
         LEFT JOIN v_vaccine_detail vd on vd.id=vsb.vaccine_detail_id
         LEFT JOIN v_vaccine_times vt on vt.id=vsb.vaccine_times_id

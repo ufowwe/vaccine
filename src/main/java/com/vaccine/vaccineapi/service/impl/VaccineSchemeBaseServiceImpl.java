@@ -3,6 +3,7 @@ package com.vaccine.vaccineapi.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
+import com.vaccine.vaccineapi.domain.GetSchemeBaseDTO;
 import com.vaccine.vaccineapi.entity.VaccineSchemeBase;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeBaseMapper;
 import com.vaccine.vaccineapi.service.IVaccineSchemeBaseService;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,32 +28,36 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
 
     @Override
     public List<SchemeInfo> getSchemeBase(Integer schemeType) {
-        List<Map<String, Object>> schemeBaseList = this.baseMapper.getSchemeBase(schemeType);
+        List<GetSchemeBaseDTO> schemeBaseList = this.baseMapper.getSchemeBase(schemeType);
         List<SchemeInfo> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(schemeBaseList)) {
             return null;
         }
         SchemeCell cell = null;
-        Map<Long, SchemeInfo> schemeInfoMap = new HashMap<>();
+        Map<Long, SchemeInfo> schemeInfoMap = new LinkedHashMap<>();
         SchemeInfo schemeInfo = null;
-        for (Map<String, Object> map : schemeBaseList) {
-            schemeInfo = schemeInfoMap.get((Long) map.get("vaccine_detail_id"));
+        for (GetSchemeBaseDTO schemeBaseDTO : schemeBaseList) {
+            schemeInfo = schemeInfoMap.get(schemeBaseDTO.getVaccineDetailId());
             if (schemeInfo == null) {
                 schemeInfo = new SchemeInfo();
             }
-            schemeInfo.setVaccineName(map.get("vaccine_detail_id").toString());
-            schemeInfo.setVaccineDetailId((Long) map.get("vaccine_detail_id"));
+            schemeInfo.setVaccineName(schemeBaseDTO.getVaccineName());
+            schemeInfo.setVaccineDetailId(schemeBaseDTO.getVaccineDetailId());
 
             cell = new SchemeCell();
-            cell.setVaccineDetailId((Long) map.get("vaccine_detail_id"));
-            cell.setVaccineTimesId((Long) map.get("vaccine_times_id"));
-            cell.setStatus((Integer) map.get("status"));
-            cell.setSchemeType((Integer) map.get("scheme_type"));
-            schemeInfo.getCellMap().put(map.get("vaccine_detail_id") + "_" + map.get("vaccine_times_id"), cell);
+            cell.setVaccineDetailId(schemeBaseDTO.getVaccineDetailId());
+            cell.setVaccineTimesId(schemeBaseDTO.getVaccineTimesId());
+            cell.setStatus(schemeBaseDTO.getStatus());
+            cell.setSchemeType(schemeBaseDTO.getSchemeType());
+            schemeInfo.getCellMap().put(schemeBaseDTO.getVaccineDetailId() + "_"
+                    + schemeBaseDTO.getVaccineTimesId() + "_"
+                    + schemeBaseDTO.getMonthNumS(), cell);
 
-            schemeInfoMap.put((Long) map.get("vaccine_detail_id"), schemeInfo);
+            schemeInfoMap.put(schemeBaseDTO.getVaccineDetailId(), schemeInfo);
         }
-
+        for (Long key : schemeInfoMap.keySet()) {
+            list.add(schemeInfoMap.get(key));
+        }
         return list;
     }
 }

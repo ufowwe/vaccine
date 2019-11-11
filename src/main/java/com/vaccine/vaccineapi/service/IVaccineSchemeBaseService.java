@@ -1,6 +1,7 @@
 package com.vaccine.vaccineapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.entity.VaccineSchemeBase;
 
 import java.util.List;
@@ -20,6 +21,6 @@ public interface IVaccineSchemeBaseService extends IService<VaccineSchemeBase> {
      * @param schemeType
      * @return
      */
-    List getSchemeBase(Integer schemeType);
+    List<SchemeInfo> getSchemeBase(Integer schemeType);
 
 }
