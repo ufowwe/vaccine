@@ -66,6 +66,7 @@ dependencies {
     compile group: 'com.ibeetl', name: 'beetl', version: '3.0.13.RELEASE'
 //    compile "org.apache.commons:commons-lang3"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile "org.springframework.boot:spring-boot-starter-logging"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
