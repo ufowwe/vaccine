@@ -50,7 +50,6 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
             cell.setStatus(schemeBaseDTO.getStatus());
             cell.setSchemeType(schemeBaseDTO.getSchemeType());
             schemeInfo.getCellMap().put(schemeBaseDTO.getVaccineDetailId() + "_"
-                    + schemeBaseDTO.getVaccineTimesId() + "_"
                     + schemeBaseDTO.getMonthNumS(), cell);
 
             schemeInfoMap.put(schemeBaseDTO.getVaccineDetailId(), schemeInfo);
