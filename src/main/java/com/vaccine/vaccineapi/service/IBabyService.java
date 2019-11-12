@@ -20,6 +20,8 @@ public interface IBabyService extends IService<Baby> {
 
     boolean updateBaby(Baby bean);
 
+    boolean deleteBaby(Long id);
+
     boolean updateTop(Long id);
 
     List<BabyInfoRes> selectList();

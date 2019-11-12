@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author admin
- * @since 2019-11-08
+ * @since 2019-11-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -58,7 +58,10 @@ public class User implements Serializable {
     private LocalDateTime birthday;
 
     @ApiModelProperty(value = "性别，0：未知，1：男；2：女")
-    private Boolean sex;
+    private Integer sex;
+
+    @ApiModelProperty(value = "关系，1：父亲；2：母亲；3：爷爷；4：奶奶；5：外公；6：外婆；7：叔叔；8：婶婶；9：姑姑；10：姑父；11：舅舅；12：舅妈；13：姨姨；14：姨父；15：阿姨（保姆）")
+    private Integer relationship;
 
     @ApiModelProperty(value = "微信openid")
     private String openid;

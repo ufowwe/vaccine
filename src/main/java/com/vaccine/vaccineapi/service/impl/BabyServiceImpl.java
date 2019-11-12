@@ -3,9 +3,13 @@ package com.vaccine.vaccineapi.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.controller.vo.baby.BabyInfoRes;
+import com.vaccine.vaccineapi.domain.BabyInfoDTO;
 import com.vaccine.vaccineapi.entity.Baby;
+import com.vaccine.vaccineapi.entity.User;
+import com.vaccine.vaccineapi.entity.UserBaby;
 import com.vaccine.vaccineapi.mapper.BabyMapper;
 import com.vaccine.vaccineapi.service.IBabyService;
+import com.vaccine.vaccineapi.service.IUserBabyService;
 import com.vaccine.vaccineapi.service.IUserService;
 import com.vaccine.vaccineapi.utils.BeanUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +40,9 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
     @Resource
     private IUserService userService;
 
+    @Resource
+    private IUserBabyService userBabyService;
+
     @Override
     public boolean saveBaby(Baby bean) {
         Long userId = userService.getUserId();
@@ -50,7 +57,20 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         bean.setTopStatus(0);
         bean.setCreateUser(userId);
         bean.setCreateDate(LocalDateTime.now());
-        return save(bean);
+        boolean saveRs = save(bean);
+
+        //保存用户和宝宝关系
+        UserBaby userBaby = new UserBaby();
+        userBaby.setUserId(userId);
+        userBaby.setBabyId(bean.getId());
+        //查询用户关系
+        User user = userService.getById(userId);
+        userBaby.setRelationship(user.getRelationship());
+        boolean userBabyRs = userBabyService.save(userBaby);
+        if (saveRs && userBabyRs) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -59,6 +79,21 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         bean.setUpdateDate(LocalDateTime.now());
         bean.setUpdateUser(userId);
         return updateById(bean);
+    }
+
+    @Override
+    public boolean deleteBaby(Long id) {
+        Long userId = userService.getUserId();
+        //删除宝宝
+        boolean rs = removeById(id);
+        //删除关系
+        QueryWrapper<UserBaby> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserBaby::getUserId, userId).eq(UserBaby::getBabyId, id);
+        boolean removeRs = userBabyService.remove(queryWrapper);
+        if (rs && removeRs) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -81,11 +116,11 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         Long userId = userService.getUserId();
         QueryWrapper<Baby> query = new QueryWrapper<>();
         query.lambda().eq(Baby::getCreateUser, userId).orderByDesc(Baby::getTopStatus).orderByAsc(Baby::getBirthday);
-        List<Baby> babyList = this.baseMapper.selectList(query);
+        List<BabyInfoDTO> babyList = getBaseMapper().getBabyInfoDTO(userId);
         List<BabyInfoRes> list = new ArrayList<>();
         if (!CollectionUtils.isEmpty(babyList)) {
             BabyInfoRes temp = null;
-            for (Baby baby : babyList) {
+            for (BabyInfoDTO baby : babyList) {
                 temp = new BabyInfoRes();
                 BeanUtil.copyProperties(baby, temp);
                 //计算年龄，2岁1月5天

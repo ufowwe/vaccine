@@ -67,7 +67,7 @@ public class BabyController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     public BaseResponse delete(@Valid @RequestBody DeleteBabyReq req) {
-        boolean rs = service.removeById(req.getId());
+        boolean rs = service.deleteBaby(req.getId());
         if (rs) {
             return BaseResponse.success("删除成功");
         } else {
