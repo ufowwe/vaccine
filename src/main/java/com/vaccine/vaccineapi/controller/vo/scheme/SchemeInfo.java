@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +22,7 @@ public class SchemeInfo {
     private Long vaccineDetailId;
 
     @ApiModelProperty(value = "疫苗剂次信息")
-    private Map<String, SchemeCell> cellMap = new HashMap<>();
+    private Map<String, SchemeCell> cellMap = new LinkedHashMap<>();
 
 
 }
