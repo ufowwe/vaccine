@@ -9,7 +9,7 @@
         <result property="birthday" column="birthday"/>
     </resultMap>
 
-    <select id="getSchemeBase" resultMap="getSchemeBaseDTO">
+    <select id="getBabyInfoDTO" resultMap="getBabyInfoDTO">
         select b.id, b.avatar, b.nickname, b.birthday from v_baby b
         left join v_user_baby ub on ub.baby_id=b.id
         where ub.user_id=#{userId}

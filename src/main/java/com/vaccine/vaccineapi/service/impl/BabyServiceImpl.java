@@ -7,6 +7,7 @@ import com.vaccine.vaccineapi.domain.BabyInfoDTO;
 import com.vaccine.vaccineapi.entity.Baby;
 import com.vaccine.vaccineapi.entity.User;
 import com.vaccine.vaccineapi.entity.UserBaby;
+import com.vaccine.vaccineapi.exception.BusinessException;
 import com.vaccine.vaccineapi.mapper.BabyMapper;
 import com.vaccine.vaccineapi.service.IBabyService;
 import com.vaccine.vaccineapi.service.IUserBabyService;
@@ -14,6 +15,8 @@ import com.vaccine.vaccineapi.service.IUserService;
 import com.vaccine.vaccineapi.utils.BeanUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -43,14 +46,15 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
     @Resource
     private IUserBabyService userBabyService;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean saveBaby(Baby bean) {
         Long userId = userService.getUserId();
         //如果宝宝名为空，则查询已存在几个宝宝，从固定名称数组中获取默认名称
         if (StringUtils.isBlank(bean.getNickname())) {
-            QueryWrapper<Baby> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().eq(Baby::getCreateUser, userId);
-            Integer integer = this.baseMapper.selectCount(queryWrapper);
+            QueryWrapper<UserBaby> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(UserBaby::getUserId, userId);
+            Integer integer = userBabyService.getBaseMapper().selectCount(queryWrapper);
             bean.setNickname(nameArr[integer]);
         }
 
@@ -69,8 +73,9 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         boolean userBabyRs = userBabyService.save(userBaby);
         if (saveRs && userBabyRs) {
             return true;
+        } else {
+            throw new BusinessException("保存失败");
         }
-        return false;
     }
 
     @Override
@@ -81,6 +86,7 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         return updateById(bean);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean deleteBaby(Long id) {
         Long userId = userService.getUserId();
@@ -92,8 +98,9 @@ public class BabyServiceImpl extends ServiceImpl<BabyMapper, Baby> implements IB
         boolean removeRs = userBabyService.remove(queryWrapper);
         if (rs && removeRs) {
             return true;
+        } else {
+            throw new BusinessException("删除失败");
         }
-        return false;
     }
 
     @Override
