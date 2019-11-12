@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.config.redis.RedisService;
 import com.vaccine.vaccineapi.controller.vo.SessionDTO;
+import com.vaccine.vaccineapi.controller.vo.UserInfo;
+import com.vaccine.vaccineapi.controller.vo.UserInfoWx;
 import com.vaccine.vaccineapi.entity.User;
 import com.vaccine.vaccineapi.exception.LogoutException;
 import com.vaccine.vaccineapi.mapper.UserMapper;
 import com.vaccine.vaccineapi.service.IUserService;
+import com.vaccine.vaccineapi.utils.BeanUtil;
 import com.vaccine.vaccineapi.utils.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public String getToken(){
         HttpServletRequest request = getHttpServletRequest();
         return request.getHeader(Constants.ACCESS_TOKEN);
+    }
+
+    @Override
+    public boolean updateUserByWx(UserInfoWx userInfo) {
+        Long userId = getUserId();
+        User user = new User();
+        BeanUtil.copyProperties(userInfo, user);
+        user.setId(userId);
+        return updateById(user);
+    }
+
+    @Override
+    public boolean updateUser(UserInfo userInfo) {
+        Long userId = getUserId();
+        User user = new User();
+        BeanUtil.copyProperties(userInfo, user);
+        user.setId(userId);
+        return updateById(user);
     }
 
     @Override

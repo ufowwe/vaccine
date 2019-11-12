@@ -1,14 +1,17 @@
 package com.vaccine.vaccineapi.controller;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.vaccine.vaccineapi.controller.vo.UserInfo;
+import com.vaccine.vaccineapi.controller.vo.UserInfoWx;
 import com.vaccine.vaccineapi.domain.BaseResponse;
-import com.vaccine.vaccineapi.entity.User;
 import com.vaccine.vaccineapi.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -30,10 +33,10 @@ public class UserController {
     @Resource
     private IUserService service;
 
-    @ApiOperation("新增")
-    @PostMapping("/save")
-    public BaseResponse save(@Valid @RequestBody User entity) {
-        boolean rs = service.save(entity);
+    @ApiOperation("微信用户信息更新到用户")
+    @PostMapping("/updateUserByWx")
+    public BaseResponse updateUserByWx(@Valid @RequestBody UserInfoWx entity) {
+        boolean rs = service.updateUserByWx(entity);
         if (rs) {
             return BaseResponse.success("保存成功");
         } else {
@@ -41,23 +44,15 @@ public class UserController {
         }
     }
 
-    @ApiOperation("更新")
-    @PostMapping("/update")
-    public BaseResponse updateById(@Valid @RequestBody User entity) {
-        boolean rs = service.updateById(entity);
+    @ApiOperation("更新用户信息")
+    @PostMapping("/updateUser")
+    public BaseResponse updateUser(@Valid @RequestBody UserInfo entity) {
+        boolean rs = service.updateUser(entity);
         if (rs) {
-            return BaseResponse.success("更新成功");
+            return BaseResponse.success("保存成功");
         } else {
-            return BaseResponse.failed("更新失败");
+            return BaseResponse.failed("保存失败");
         }
-    }
-
-    @ApiOperation("查询集合")
-    @GetMapping("/getList")
-    public BaseResponse getList() {
-        Page page = new Page<>();
-        User user = service.getUser();
-        return BaseResponse.success("success");
     }
 
 }
