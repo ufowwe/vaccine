@@ -21,6 +21,12 @@ public class SchemeInfo {
     @ApiModelProperty(value = "疫苗明细ID")
     private Long vaccineDetailId;
 
+    @ApiModelProperty(value = "同效疫苗，逗号分隔")
+    private String sameEffect;
+
+    @ApiModelProperty(value = "相关疫苗，逗号分隔")
+    private String relevant;
+
     @ApiModelProperty(value = "疫苗剂次信息")
     private Map<String, SchemeCell> cellMap = new LinkedHashMap<>();
 

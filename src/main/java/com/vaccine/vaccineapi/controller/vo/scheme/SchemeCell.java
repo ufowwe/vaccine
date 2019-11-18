@@ -16,12 +16,24 @@ public class SchemeCell {
     private Long vaccineDetailId;
 
     @ApiModelProperty(value = "疫苗剂次ID")
-    private Long vaccineTimesId;
+    private Long vaccineSchemeId;
+
+    @ApiModelProperty(value = "剂次")
+    private Integer times;
+
+    @ApiModelProperty(value = "最小月")
+    private Integer monthNumS;
+
+    @ApiModelProperty(value = "最大约")
+    private Integer monthNumE;
 
     @ApiModelProperty(value = "选取状态，0：未选择；1：已选择")
     private Integer status;
 
     @ApiModelProperty(value = "方案类型，1：国家免费方案；2：常规推荐方案；3：最优推荐方案；4：自定义方案")
     private Integer schemeType;
+
+    @ApiModelProperty(value = "所属省ID")
+    private Integer provinceId;
 
 }

@@ -1,9 +1,8 @@
 package com.vaccine.vaccineapi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
-import com.vaccine.vaccineapi.domain.GetSchemeBaseDTO;
+import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.VaccineSchemeBase;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeBaseMapper;
 import com.vaccine.vaccineapi.service.IVaccineSchemeBaseService;
@@ -11,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -28,7 +25,7 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
 
     @Override
     public List<SchemeInfo> getSchemeBase(Integer schemeType) {
-        List<GetSchemeBaseDTO> schemeBaseList = this.baseMapper.getSchemeBase(schemeType);
+        /*List<GetSchemeDTO> schemeBaseList = this.baseMapper.getSchemeBase(schemeType);
         List<SchemeInfo> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(schemeBaseList)) {
             return null;
@@ -36,7 +33,7 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
         SchemeCell cell = null;
         Map<Long, SchemeInfo> schemeInfoMap = new LinkedHashMap<>();
         SchemeInfo schemeInfo = null;
-        for (GetSchemeBaseDTO schemeBaseDTO : schemeBaseList) {
+        for (GetSchemeDTO schemeBaseDTO : schemeBaseList) {
             schemeInfo = schemeInfoMap.get(schemeBaseDTO.getVaccineDetailId());
             if (schemeInfo == null) {
                 schemeInfo = new SchemeInfo();
@@ -57,17 +54,18 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
         for (Long key : schemeInfoMap.keySet()) {
             list.add(schemeInfoMap.get(key));
         }
-        return list;
+        return list;*/
+        return null;
     }
 
     @Override
     public List<SchemeInfo> getSchemeBaseNoBaby() {
-        List<GetSchemeBaseDTO> schemeBaseList = this.baseMapper.getSchemeBase(5);
+        List<GetSchemeDTO> schemeBaseList = this.baseMapper.getSchemeBase(5);
         List<SchemeInfo> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(schemeBaseList)) {
             return null;
         }
-        for (GetSchemeBaseDTO schemeBaseDTO : schemeBaseList) {
+        for (GetSchemeDTO schemeBaseDTO : schemeBaseList) {
 
         }
         return null;

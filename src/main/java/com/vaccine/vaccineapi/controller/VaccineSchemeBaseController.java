@@ -1,21 +1,13 @@
 package com.vaccine.vaccineapi.controller;
 
 
-import com.vaccine.vaccineapi.controller.vo.scheme.GetSchemeReq;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
-import com.vaccine.vaccineapi.domain.BaseResponse;
 import com.vaccine.vaccineapi.service.IVaccineSchemeBaseService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>
@@ -33,17 +25,5 @@ public class VaccineSchemeBaseController {
 
     @Resource
     private IVaccineSchemeBaseService service;
-
-    @ApiOperation("获取基础方案")
-    @PostMapping("/getSchemeBase")
-    public BaseResponse getSchemeBase(@Valid @RequestBody GetSchemeReq req) {
-        boolean rs = true;
-        List<SchemeInfo> schemeInfoList = service.getSchemeBase(req.getSchemeType());
-        if (rs) {
-            return BaseResponse.success("查询成功", schemeInfoList);
-        } else {
-            return BaseResponse.failed("查询失败", schemeInfoList);
-        }
-    }
 
 }

@@ -2,26 +2,26 @@ package com.vaccine.vaccineapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
-import com.vaccine.vaccineapi.entity.VaccineSchemeBase;
+import com.vaccine.vaccineapi.entity.VaccineScheme;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
  * <p>
- * 疫苗基础方案 Mapper 接口
+ * 疫苗剂次 Mapper 接口
  * </p>
  *
  * @author admin
- * @since 2019-11-11
+ * @since 2019-11-18
  */
-public interface VaccineSchemeBaseMapper extends BaseMapper<VaccineSchemeBase> {
+public interface VaccineSchemeMapper extends BaseMapper<VaccineScheme> {
 
     /**
      * 查询基础方案
      * @param schemeType
      * @return
      */
-    List<GetSchemeDTO> getSchemeBase(@Param("schemeType") Integer schemeType);
+    List<GetSchemeDTO> getScheme(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
 
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vaccine.vaccineapi.mapper.VaccineSchemeMapper">
+
+    <resultMap type="com.vaccine.vaccineapi.domain.GetSchemeDTO" id="getSchemeDTO">
+        <result property="vaccineDetailId" column="vaccine_detail_id"/>
+        <result property="vaccineName" column="vaccine_name"/>
+        <result property="sameEffect" column="same_effect"/>
+        <result property="relevant" column="relevant"/>
+        <result property="vaccineSchemeId" column="vaccine_scheme_id"/>
+        <result property="times" column="times"/>
+        <result property="monthNumS" column="month_num_s"/>
+        <result property="monthNumE" column="month_num_e"/>
+        <result property="status" column="status"/>
+        <result property="schemeType" column="scheme_type"/>
+        <result property="provinceId" column="province_id"/>
+    </resultMap>
+
+    <select id="getScheme" resultMap="getSchemeDTO">
+        select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant,
+            vvs.id vaccine_scheme_id, vvs.times, vvs.month_num_s, vvs.month_num_e, vvs.status, vvs.scheme_type, vvs.province_id
+        from v_vaccine_scheme vvs
+        LEFT JOIN v_vaccine_detail vvd on vvd.id=vvs.vaccine_detail_id
+        where vvs.scheme_type=#{schemeType} and vvs.province_id=#{provinceId}
+    </select>
+
+</mapper>

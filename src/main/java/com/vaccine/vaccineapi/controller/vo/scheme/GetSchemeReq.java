@@ -18,6 +18,8 @@ public class GetSchemeReq {
     @NotNull(message = "方案类型为空")
     private Integer schemeType;
 
-
+    @ApiModelProperty(value = "所属省")
+    @NotNull(message = "所属省为空")
+    private Integer provinceId;
 
 }
