@@ -2,6 +2,7 @@ package com.vaccine.vaccineapi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
+import com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeVaccineInfo;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
@@ -69,17 +70,20 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         if (schemeType == 1 || schemeType == 2 || schemeType == 3) {
             //去接种点次数
             Integer hospitalTimes = getBaseMapper().getHospitalTimes(schemeType, provinceId);
+            schemeInfo.setHospitalTimes(hospitalTimes - 1);
             //累计接种剂次
             Integer totalDosageNum = getBaseMapper().getTotalDosageNum(schemeType, provinceId);
+            schemeInfo.setTotalDosageNum(totalDosageNum);
             //接种疫苗种数
             Integer vaccineNum = getBaseMapper().getVaccineNum(schemeType, provinceId);
-            //预防疾病种数
-            Integer diseaseNum = getBaseMapper().getVaccineNum(schemeType, provinceId);
-            schemeInfo.setHospitalTimes(hospitalTimes - 1);
-            schemeInfo.setTotalDosageNum(totalDosageNum);
             schemeInfo.setVaccineNum(vaccineNum);
+            //预防疾病种数
+            Integer diseaseNum = getBaseMapper().getDiseaseNum(schemeType, provinceId);
             schemeInfo.setDiseaseNum(diseaseNum);
         }
+        //获取表头
+        List<SchemeColumn> columnList = getBaseMapper().getColumn(schemeType, provinceId);
+        schemeInfo.setColumnList(columnList);
 
         return schemeInfo;
     }

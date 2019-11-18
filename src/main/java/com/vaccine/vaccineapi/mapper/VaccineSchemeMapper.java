@@ -1,6 +1,7 @@
 package com.vaccine.vaccineapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 import org.apache.ibatis.annotations.Param;
@@ -31,5 +32,7 @@ public interface VaccineSchemeMapper extends BaseMapper<VaccineScheme> {
     Integer getVaccineNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
 
     Integer getDiseaseNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+
+    List<SchemeColumn> getColumn(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
 
 }

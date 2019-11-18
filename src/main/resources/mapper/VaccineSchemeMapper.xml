@@ -16,6 +16,12 @@
         <result property="provinceId" column="province_id"/>
     </resultMap>
 
+    <resultMap type="com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn" id="schemeColumn">
+        <result property="vaccinationAge" column="vaccination_age"/>
+        <result property="monthNumS" column="month_num_s"/>
+        <result property="monthNumE" column="month_num_e"/>
+    </resultMap>
+
     <select id="getScheme" resultMap="getSchemeDTO">
         select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant,
             vvs.id vaccine_scheme_id, vvs.times, vvs.month_num_s, vvs.month_num_e, vvs.status, vvs.scheme_type, vvs.province_id
@@ -37,15 +43,19 @@
     <select id="getVaccineNum" resultType="Integer">
         select sum(dosage_times*disease_num) vaccineNum from v_vaccine_detail vvd,
             (select vaccine_detail_id from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
-                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id;
+                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id
 
     </select>
 
     <select id="getDiseaseNum" resultType="Integer">
         select sum(dosage_times*disease_num) vaccineNum from v_vaccine_detail vvd,
             (select vaccine_detail_id from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
-                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id;
+                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id
 
+    </select>
+
+    <select id="getColumn" resultMap="schemeColumn">
+        select vaccination_age, month_num_s, month_num_e from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} group by vaccination_age order by month_num_s asc
     </select>
 
 </mapper>

@@ -26,6 +26,9 @@ public class SchemeInfo {
     @ApiModelProperty(value = "预防疾病种数")
     private Integer diseaseNum;
 
+    @ApiModelProperty(value = "表头信息")
+    private List<SchemeColumn> columnList;
+
     @ApiModelProperty(value = "疫苗剂次信息")
     private List<SchemeVaccineInfo> schemeVaccineInfoList;
 
