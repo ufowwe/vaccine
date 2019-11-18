@@ -7,6 +7,7 @@
         <result property="vaccineName" column="vaccine_name"/>
         <result property="sameEffect" column="same_effect"/>
         <result property="relevant" column="relevant"/>
+        <result property="diseaseNum" column="disease_num"/>
         <result property="vaccineSchemeId" column="vaccine_scheme_id"/>
         <result property="times" column="times"/>
         <result property="monthNumS" column="month_num_s"/>
@@ -23,7 +24,7 @@
     </resultMap>
 
     <select id="getScheme" resultMap="getSchemeDTO">
-        select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant,
+        select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant, vvd.disease_num,
             vvs.id vaccine_scheme_id, vvs.times, vvs.month_num_s, vvs.month_num_e, vvs.status, vvs.scheme_type, vvs.province_id
         from v_vaccine_scheme vvs
         LEFT JOIN v_vaccine_detail vvd on vvd.id=vvs.vaccine_detail_id

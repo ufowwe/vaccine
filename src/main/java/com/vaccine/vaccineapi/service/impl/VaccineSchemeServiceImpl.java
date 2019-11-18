@@ -39,6 +39,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         SchemeCell cell = null;
         Map<Long, SchemeVaccineInfo> schemeVaccineInfoMap = new LinkedHashMap<>();
         SchemeVaccineInfo schemeVaccineInfo = null;
+        int times = 0;
         for (GetSchemeDTO schemeDTO : schemeList) {
             schemeVaccineInfo = schemeVaccineInfoMap.get(schemeDTO.getVaccineDetailId());
             if (schemeVaccineInfo == null) {
@@ -46,12 +47,17 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             }
             schemeVaccineInfo.setVaccineName(schemeDTO.getVaccineName());
             schemeVaccineInfo.setVaccineDetailId(schemeDTO.getVaccineDetailId());
+            //同效疫苗
             schemeVaccineInfo.setSameEffect(schemeDTO.getSameEffect());
+            //相关疫苗
             schemeVaccineInfo.setRelevant(schemeDTO.getRelevant());
+            //预防疾病种类
+            schemeVaccineInfo.setDiseaseNum(schemeDTO.getDiseaseNum());
 
             cell = new SchemeCell();
             cell.setVaccineDetailId(schemeDTO.getVaccineDetailId());
             cell.setVaccineSchemeId(schemeDTO.getVaccineSchemeId());
+            cell.setTimes(schemeDTO.getTimes());
             cell.setMonthNumS(schemeDTO.getMonthNumS());
             cell.setMonthNumE(schemeDTO.getMonthNumE());
             cell.setStatus(schemeDTO.getStatus());
@@ -59,12 +65,21 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             cell.setProvinceId(schemeDTO.getProvinceId());
             schemeVaccineInfo.getCellMap().put(schemeDTO.getVaccineDetailId() + "_"
                     + schemeDTO.getMonthNumS(), cell);
+            //累计剂次数
+            schemeVaccineInfo.setDosageTimes(schemeVaccineInfo.getDosageTimes() + 1);
+            //选中状态
+            schemeVaccineInfo.setStatus(cell.getStatus());
 
             schemeVaccineInfoMap.put(schemeDTO.getVaccineDetailId(), schemeVaccineInfo);
         }
         for (Long key : schemeVaccineInfoMap.keySet()) {
-            list.add(schemeVaccineInfoMap.get(key));
+            SchemeVaccineInfo temp = schemeVaccineInfoMap.get(key);
+            //计算单个疫苗累计接种疫苗种数
+            int vaccineNum = temp.getStatus() * temp.getDosageTimes() * temp.getDiseaseNum();
+            temp.setVaccineNum(vaccineNum);
+            list.add(temp);
         }
+        //疫苗剂次信息
         schemeInfo.setSchemeVaccineInfoList(list);
 
         if (schemeType == 1 || schemeType == 2 || schemeType == 3) {

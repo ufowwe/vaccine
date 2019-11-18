@@ -13,6 +13,7 @@ public class GetSchemeDTO {
     private String vaccineName;
     private String sameEffect;
     private String relevant;
+    private Integer diseaseNum;
     private Long vaccineSchemeId;
     private Integer times;
     private Integer monthNumS;
