@@ -41,10 +41,9 @@
     </select>
 
     <select id="getVaccineNum" resultType="Integer">
-        select sum(dosage_times*disease_num) vaccineNum from v_vaccine_detail vvd,
-            (select vaccine_detail_id from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
-                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id
-
+        select sum(t.times*disease_num) vaccineNum from v_vaccine_detail vvd,
+            (select vaccine_detail_id, count(times) times from v_vaccine_scheme
+            where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1 group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id
     </select>
 
     <select id="getDiseaseNum" resultType="Integer">
