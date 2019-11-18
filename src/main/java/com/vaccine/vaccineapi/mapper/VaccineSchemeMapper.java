@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * 疫苗剂次 Mapper 接口
+ * 疫苗方案 Mapper 接口
  * </p>
  *
  * @author admin

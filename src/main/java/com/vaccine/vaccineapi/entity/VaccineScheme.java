@@ -1,18 +1,19 @@
 package com.vaccine.vaccineapi.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 疫苗剂次
+ * 疫苗方案
  * </p>
  *
  * @author admin
@@ -22,7 +23,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("v_vaccine_scheme")
-@ApiModel(value="VaccineScheme对象", description="疫苗剂次")
+@ApiModel(value="VaccineScheme对象", description="疫苗方案")
 public class VaccineScheme implements Serializable {
 
     private static final long serialVersionUID = 1L;

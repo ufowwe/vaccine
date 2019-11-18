@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * <p>
- * 疫苗剂次 前端控制器
+ * 疫苗方案 前端控制器
  * </p>
  *
  * @author admin

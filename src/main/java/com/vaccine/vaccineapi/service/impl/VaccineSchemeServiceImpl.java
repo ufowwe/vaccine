@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 疫苗剂次 服务实现类
+ * 疫苗方案 服务实现类
  * </p>
  *
  * @author admin

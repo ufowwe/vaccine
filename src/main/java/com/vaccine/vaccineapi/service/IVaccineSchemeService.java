@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <p>
- * 疫苗剂次 服务类
+ * 疫苗方案 服务类
  * </p>
  *
  * @author admin
