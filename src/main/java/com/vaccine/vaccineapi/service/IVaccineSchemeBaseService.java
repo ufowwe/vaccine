@@ -17,10 +17,16 @@ import java.util.List;
 public interface IVaccineSchemeBaseService extends IService<VaccineSchemeBase> {
 
     /**
-     * 查询基础服务
+     * 查询系统预设方案
      * @param schemeType
      * @return
      */
     List<SchemeInfo> getSchemeBase(Integer schemeType);
+
+    /**
+     * 查询未登录或者未设置宝宝时的接种证
+     * @return
+     */
+    List<SchemeInfo> getSchemeBaseNoBaby();
 
 }

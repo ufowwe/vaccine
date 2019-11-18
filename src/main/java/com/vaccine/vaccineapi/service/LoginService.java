@@ -25,7 +25,9 @@ import java.time.LocalDateTime;
 public class LoginService {
 
     private static final String appid = "wx561935ed00ba2f46";
+//    private static final String appid = "wx609aa3c6a9be088a";
     private static final String secret = "51237145f7db3be1378a2ab42d13f487";
+//    private static final String secret = "";
     private static final String grant_type = "authorization_code";
 
     private static final String code2Session_url = "https://api.weixin.qq.com/sns/jscode2session?";

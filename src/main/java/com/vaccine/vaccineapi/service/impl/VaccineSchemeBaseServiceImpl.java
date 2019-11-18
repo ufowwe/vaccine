@@ -59,4 +59,17 @@ public class VaccineSchemeBaseServiceImpl extends ServiceImpl<VaccineSchemeBaseM
         }
         return list;
     }
+
+    @Override
+    public List<SchemeInfo> getSchemeBaseNoBaby() {
+        List<GetSchemeBaseDTO> schemeBaseList = this.baseMapper.getSchemeBase(5);
+        List<SchemeInfo> list = new ArrayList<>();
+        if (CollectionUtils.isEmpty(schemeBaseList)) {
+            return null;
+        }
+        for (GetSchemeBaseDTO schemeBaseDTO : schemeBaseList) {
+
+        }
+        return null;
+    }
 }
