@@ -24,4 +24,28 @@
         where vvs.scheme_type=#{schemeType} and vvs.province_id=#{provinceId}
     </select>
 
+    <select id="getHospitalTimes" resultType="Integer">
+        select count(1) hospitalTimes
+        from (select vaccine_detail_id from v_vaccine_scheme
+            where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1 group by scheme_type, province_id, vaccine_detail_id) t
+    </select>
+
+    <select id="getTotalDosageNum" resultType="Integer">
+        select count(times) totalDosageNum from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
+    </select>
+
+    <select id="getVaccineNum" resultType="Integer">
+        select sum(dosage_times*disease_num) vaccineNum from v_vaccine_detail vvd,
+            (select vaccine_detail_id from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
+                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id;
+
+    </select>
+
+    <select id="getDiseaseNum" resultType="Integer">
+        select sum(dosage_times*disease_num) vaccineNum from v_vaccine_detail vvd,
+            (select vaccine_detail_id from v_vaccine_scheme where scheme_type=#{schemeType} and province_id=#{provinceId} and status=1
+                group by vaccine_detail_id) t where vvd.id=t.vaccine_detail_id;
+
+    </select>
+
 </mapper>

@@ -3,6 +3,7 @@ package com.vaccine.vaccineapi.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
+import com.vaccine.vaccineapi.controller.vo.scheme.SchemeVaccineInfo;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeMapper;
@@ -27,24 +28,25 @@ import java.util.Map;
 public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, VaccineScheme> implements IVaccineSchemeService {
 
     @Override
-    public List<SchemeInfo> getScheme(Integer schemeType, Integer provinceId) {
+    public SchemeInfo getScheme(Integer schemeType, Integer provinceId) {
+        SchemeInfo schemeInfo = new SchemeInfo();
         List<GetSchemeDTO> schemeList = getBaseMapper().getScheme(schemeType, provinceId);
-        List<SchemeInfo> list = new ArrayList<>();
+        List<SchemeVaccineInfo> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(schemeList)) {
-            return null;
+            return schemeInfo;
         }
         SchemeCell cell = null;
-        Map<Long, SchemeInfo> schemeInfoMap = new LinkedHashMap<>();
-        SchemeInfo schemeInfo = null;
+        Map<Long, SchemeVaccineInfo> schemeVaccineInfoMap = new LinkedHashMap<>();
+        SchemeVaccineInfo schemeVaccineInfo = null;
         for (GetSchemeDTO schemeDTO : schemeList) {
-            schemeInfo = schemeInfoMap.get(schemeDTO.getVaccineDetailId());
-            if (schemeInfo == null) {
-                schemeInfo = new SchemeInfo();
+            schemeVaccineInfo = schemeVaccineInfoMap.get(schemeDTO.getVaccineDetailId());
+            if (schemeVaccineInfo == null) {
+                schemeVaccineInfo = new SchemeVaccineInfo();
             }
-            schemeInfo.setVaccineName(schemeDTO.getVaccineName());
-            schemeInfo.setVaccineDetailId(schemeDTO.getVaccineDetailId());
-            schemeInfo.setSameEffect(schemeDTO.getSameEffect());
-            schemeInfo.setRelevant(schemeDTO.getRelevant());
+            schemeVaccineInfo.setVaccineName(schemeDTO.getVaccineName());
+            schemeVaccineInfo.setVaccineDetailId(schemeDTO.getVaccineDetailId());
+            schemeVaccineInfo.setSameEffect(schemeDTO.getSameEffect());
+            schemeVaccineInfo.setRelevant(schemeDTO.getRelevant());
 
             cell = new SchemeCell();
             cell.setVaccineDetailId(schemeDTO.getVaccineDetailId());
@@ -54,15 +56,32 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             cell.setStatus(schemeDTO.getStatus());
             cell.setSchemeType(schemeDTO.getSchemeType());
             cell.setProvinceId(schemeDTO.getProvinceId());
-            schemeInfo.getCellMap().put(schemeDTO.getVaccineDetailId() + "_"
+            schemeVaccineInfo.getCellMap().put(schemeDTO.getVaccineDetailId() + "_"
                     + schemeDTO.getMonthNumS(), cell);
 
-            schemeInfoMap.put(schemeDTO.getVaccineDetailId(), schemeInfo);
+            schemeVaccineInfoMap.put(schemeDTO.getVaccineDetailId(), schemeVaccineInfo);
         }
-        for (Long key : schemeInfoMap.keySet()) {
-            list.add(schemeInfoMap.get(key));
+        for (Long key : schemeVaccineInfoMap.keySet()) {
+            list.add(schemeVaccineInfoMap.get(key));
         }
-        return list;
+        schemeInfo.setSchemeVaccineInfoList(list);
+
+        if (schemeType == 1 || schemeType == 2 || schemeType == 3) {
+            //去接种点次数
+            Integer hospitalTimes = getBaseMapper().getHospitalTimes(schemeType, provinceId);
+            //累计接种剂次
+            Integer totalDosageNum = getBaseMapper().getTotalDosageNum(schemeType, provinceId);
+            //接种疫苗种数
+            Integer vaccineNum = getBaseMapper().getVaccineNum(schemeType, provinceId);
+            //预防疾病种数
+            Integer diseaseNum = getBaseMapper().getVaccineNum(schemeType, provinceId);
+            schemeInfo.setHospitalTimes(hospitalTimes - 1);
+            schemeInfo.setTotalDosageNum(totalDosageNum);
+            schemeInfo.setVaccineNum(vaccineNum);
+            schemeInfo.setDiseaseNum(diseaseNum);
+        }
+
+        return schemeInfo;
     }
 
 }

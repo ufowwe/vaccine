@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>
@@ -37,13 +36,8 @@ public class VaccineSchemeController {
     @ApiOperation("获取基础方案")
     @PostMapping("/getScheme")
     public BaseResponse getSchemeBase(@Valid @RequestBody GetSchemeReq req) {
-        boolean rs = true;
-        List<SchemeInfo> schemeInfoList = service.getScheme(req.getSchemeType(), req.getProvinceId());
-        if (rs) {
-            return BaseResponse.success("查询成功", schemeInfoList);
-        } else {
-            return BaseResponse.failed("查询失败", schemeInfoList);
-        }
+        SchemeInfo schemeInfo = service.getScheme(req.getSchemeType(), req.getProvinceId());
+        return BaseResponse.success("查询成功", schemeInfo);
     }
 
 }

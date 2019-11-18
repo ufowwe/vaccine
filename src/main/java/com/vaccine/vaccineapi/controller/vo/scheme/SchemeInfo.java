@@ -4,8 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author hongye.lv
@@ -15,20 +14,20 @@ import java.util.Map;
 @ApiModel(value = "基础方案信息")
 public class SchemeInfo {
 
-    @ApiModelProperty(value = "疫苗名称")
-    private String vaccineName;
+    @ApiModelProperty(value = "去接种点次数")
+    private Integer hospitalTimes;
 
-    @ApiModelProperty(value = "疫苗明细ID")
-    private Long vaccineDetailId;
+    @ApiModelProperty(value = "累计接种剂次")
+    private Integer totalDosageNum;
 
-    @ApiModelProperty(value = "同效疫苗，逗号分隔")
-    private String sameEffect;
+    @ApiModelProperty(value = "接种疫苗种数")
+    private Integer vaccineNum;
 
-    @ApiModelProperty(value = "相关疫苗，逗号分隔")
-    private String relevant;
+    @ApiModelProperty(value = "预防疾病种数")
+    private Integer diseaseNum;
 
     @ApiModelProperty(value = "疫苗剂次信息")
-    private Map<String, SchemeCell> cellMap = new LinkedHashMap<>();
+    private List<SchemeVaccineInfo> schemeVaccineInfoList;
 
 
 }
