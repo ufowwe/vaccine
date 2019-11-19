@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,11 +34,14 @@ public class SchemeVaccineInfo {
     @ApiModelProperty(value = "总剂次数")
     private Integer dosageTimes = 0;
 
-    @ApiModelProperty(value = "总剂次数")
+    @ApiModelProperty(value = "0：未选择；1：已选择")
     private Integer status;
 
     @ApiModelProperty(value = "单个疫苗累计接种疫苗种数")
     private Integer vaccineNum;
+
+    @ApiModelProperty(value = "价格")
+    private BigDecimal price;
 
     @ApiModelProperty(value = "疫苗剂次信息")
     private Map<String, SchemeCell> cellMap = new LinkedHashMap<>();

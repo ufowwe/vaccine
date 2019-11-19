@@ -53,6 +53,8 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             schemeVaccineInfo.setRelevant(schemeDTO.getRelevant());
             //预防疾病种类
             schemeVaccineInfo.setDiseaseNum(schemeDTO.getDiseaseNum());
+            //疫苗价格
+            schemeVaccineInfo.setPrice(schemeDTO.getPrice());
 
             cell = new SchemeCell();
             cell.setVaccineDetailId(schemeDTO.getVaccineDetailId());
@@ -75,8 +77,8 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         for (Long key : schemeVaccineInfoMap.keySet()) {
             SchemeVaccineInfo temp = schemeVaccineInfoMap.get(key);
             //计算单个疫苗累计接种疫苗种数
-            int vaccineNum = temp.getStatus() * temp.getDosageTimes() * temp.getDiseaseNum();
-            temp.setVaccineNum(vaccineNum);
+//            int vaccineNum = temp.getStatus() * temp.getDosageTimes() * temp.getDiseaseNum();
+//            temp.setVaccineNum(vaccineNum);
             list.add(temp);
         }
         //疫苗剂次信息
