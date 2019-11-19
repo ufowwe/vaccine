@@ -3,7 +3,7 @@ package com.vaccine.vaccineapi.controller;
 
 import com.vaccine.vaccineapi.controller.vo.LoginReqVO;
 import com.vaccine.vaccineapi.controller.vo.LoginResVO;
-import com.vaccine.vaccineapi.domain.BaseResponse;
+import com.vaccine.vaccineapi.domain.BaseResponsePlus;
 import com.vaccine.vaccineapi.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,9 +34,11 @@ public class LoginController {
 
     @ApiOperation("登陆")
     @PostMapping("/login")
-    public BaseResponse login(@Valid @RequestBody LoginReqVO entity) {
+    public BaseResponsePlus<LoginResVO> login(@Valid @RequestBody LoginReqVO entity) {
         LoginResVO loginResVO = loginService.login(entity.getCode());
-        return BaseResponse.success("登陆成功", loginResVO);
+        BaseResponsePlus<LoginResVO> rs = new BaseResponsePlus<>();
+        rs.success("登录成功", loginResVO);
+        return rs;
     }
 
 }

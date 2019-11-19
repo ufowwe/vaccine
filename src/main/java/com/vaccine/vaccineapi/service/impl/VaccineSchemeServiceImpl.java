@@ -74,6 +74,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 
             schemeVaccineInfoMap.put(schemeDTO.getVaccineDetailId(), schemeVaccineInfo);
         }
+        int diseaseNum = 0;
         for (Long key : schemeVaccineInfoMap.keySet()) {
             SchemeVaccineInfo temp = schemeVaccineInfoMap.get(key);
             //计算单个疫苗累计接种疫苗种数
@@ -81,6 +82,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 //            temp.setVaccineNum(vaccineNum);
             list.add(temp);
         }
+        computeDiseaseNum(list);
         //疫苗剂次信息
         schemeInfo.setSchemeVaccineInfoList(list);
 
@@ -95,7 +97,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             Integer vaccineNum = getBaseMapper().getVaccineNum(schemeType, provinceId);
             schemeInfo.setVaccineNum(vaccineNum);
             //预防疾病种数
-            Integer diseaseNum = getBaseMapper().getDiseaseNum(schemeType, provinceId);
+            diseaseNum = getBaseMapper().getDiseaseNum(schemeType, provinceId);
             schemeInfo.setDiseaseNum(diseaseNum);
         }
         //获取表头
@@ -103,6 +105,14 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         schemeInfo.setColumnList(columnList);
 
         return schemeInfo;
+    }
+
+    private int computeDiseaseNum(List<SchemeVaccineInfo> list) {
+        int diseaseNum = 0;
+        for (SchemeVaccineInfo info : list) {
+            diseaseNum += info.getStatus() * info.getDiseaseNum();
+        }
+        return 0;
     }
 
 }

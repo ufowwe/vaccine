@@ -3,7 +3,7 @@ package com.vaccine.vaccineapi.controller;
 
 import com.vaccine.vaccineapi.controller.vo.scheme.GetSchemeReq;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
-import com.vaccine.vaccineapi.domain.BaseResponse;
+import com.vaccine.vaccineapi.domain.BaseResponsePlus;
 import com.vaccine.vaccineapi.service.IVaccineSchemeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,9 +35,11 @@ public class VaccineSchemeController {
 
     @ApiOperation("获取基础方案")
     @PostMapping("/getScheme")
-    public BaseResponse getSchemeBase(@Valid @RequestBody GetSchemeReq req) {
+    public BaseResponsePlus<SchemeInfo> getSchemeBase(@Valid @RequestBody GetSchemeReq req) {
         SchemeInfo schemeInfo = service.getScheme(req.getSchemeType(), req.getProvinceId());
-        return BaseResponse.success("查询成功", schemeInfo);
+        BaseResponsePlus<SchemeInfo> rs = new BaseResponsePlus<>();
+        rs.success("查询成功", schemeInfo);
+        return rs;
     }
 
 }

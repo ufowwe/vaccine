@@ -3,6 +3,7 @@ package com.vaccine.vaccineapi.controller;
 
 import com.vaccine.vaccineapi.controller.vo.baby.*;
 import com.vaccine.vaccineapi.domain.BaseResponse;
+import com.vaccine.vaccineapi.domain.BaseResponsePlus;
 import com.vaccine.vaccineapi.entity.Baby;
 import com.vaccine.vaccineapi.service.IBabyService;
 import com.vaccine.vaccineapi.utils.BeanUtil;
@@ -88,9 +89,11 @@ public class BabyController {
 
     @ApiOperation("宝宝集合")
     @PostMapping("/selectList")
-    public BaseResponse selectList() {
+    public BaseResponsePlus<List<BabyInfoRes>> selectList() {
         List<BabyInfoRes> babyInfoList = service.selectList();
-        return BaseResponse.success("查询成功", babyInfoList);
+        BaseResponsePlus<List<BabyInfoRes>> rs = new BaseResponsePlus<>();
+        rs.success("查询成功", babyInfoList);
+        return rs;
     }
 
 }
