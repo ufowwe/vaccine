@@ -1,17 +1,25 @@
 package com.vaccine.vaccineapi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeVaccineInfo;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
+import com.vaccine.vaccineapi.entity.Baby;
+import com.vaccine.vaccineapi.entity.VaccineRecord;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeMapper;
+import com.vaccine.vaccineapi.service.IBabyService;
+import com.vaccine.vaccineapi.service.IVaccineRecordService;
 import com.vaccine.vaccineapi.service.IVaccineSchemeService;
+import com.vaccine.vaccineapi.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,6 +35,12 @@ import java.util.Map;
  */
 @Service
 public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, VaccineScheme> implements IVaccineSchemeService {
+
+    @Resource
+    private IVaccineRecordService vaccineRecordService;
+
+    @Resource
+    private IBabyService babyService;
 
     @Override
     public SchemeInfo getScheme(Integer schemeType, Integer provinceId) {
@@ -113,6 +127,50 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             diseaseNum += info.getStatus() * info.getDiseaseNum();
         }
         return 0;
+    }
+
+    @Override
+    public boolean saveScheme(Long babyId, Integer schemeType, Long provinceId, List<Long> vaccineDetailIdList) {
+        QueryWrapper<VaccineScheme> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(VaccineScheme::getVaccineDetailId, vaccineDetailIdList);
+        List<VaccineScheme> vaccineSchemeList = getBaseMapper().selectList(queryWrapper);
+        if (CollectionUtils.isEmpty(vaccineSchemeList)) {
+            return false;
+        }
+        //查询宝宝信息
+        Baby baby = babyService.getById(babyId);
+        LocalDateTime birthday = baby.getBirthday();
+        VaccineRecord record = null;
+        List<VaccineRecord> recordList = new ArrayList<>();
+        for (VaccineScheme scheme : vaccineSchemeList) {
+            record = new VaccineRecord();
+            scheme.setId(null);
+            BeanUtil.copyProperties(scheme, record);
+            record.setBabyId(babyId);
+            record.setSchemeType(schemeType);
+            record.setProvinceId(provinceId);
+            record.setStatus(1);
+            //计算推荐接种时间
+            int month = (int) scheme.getMonthNumS().doubleValue();
+            //如果相等，则month为整数，否则为小数，小数都为0.5，按15天计算
+            if (scheme.getMonthNumS().doubleValue() == month) {
+                birthday.plusMonths(month);
+            } else {
+                birthday.plusMonths(month);
+                birthday.plusDays(15);
+            }
+            record.setVaccinationDate(birthday);
+            record.setVaccinationStatus(0);
+
+            recordList.add(record);
+        }
+        return vaccineRecordService.saveBatch(recordList);
+    }
+
+    public static void main(String[] args) {
+        Double a = 6.0;
+        int b = (int)a.doubleValue();
+        System.out.println(a == b);
     }
 
 }

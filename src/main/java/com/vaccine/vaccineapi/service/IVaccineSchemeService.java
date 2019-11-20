@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 
+import java.util.List;
+
 /**
  * <p>
  * 疫苗方案 服务类
@@ -20,5 +22,12 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
      * @return
      */
     SchemeInfo getScheme(Integer schemeType, Integer provinceId);
+
+    /**
+     * 保存方案
+     * @param schemeType
+     * @return
+     */
+    boolean saveScheme(Long babyId, Integer schemeType, Long provinceId, List<Long> vaccineDetailIdList);
 
 }

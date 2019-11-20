@@ -2,12 +2,16 @@ package com.vaccine.vaccineapi.controller;
 
 
 import com.vaccine.vaccineapi.controller.vo.scheme.GetSchemeReq;
+import com.vaccine.vaccineapi.controller.vo.scheme.SaveSchemeReq;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
+import com.vaccine.vaccineapi.domain.BaseResponse;
 import com.vaccine.vaccineapi.domain.BaseResponsePlus;
+import com.vaccine.vaccineapi.exception.BusinessException;
 import com.vaccine.vaccineapi.service.IVaccineSchemeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +44,20 @@ public class VaccineSchemeController {
         BaseResponsePlus<SchemeInfo> rs = new BaseResponsePlus<>();
         rs.success("查询成功", schemeInfo);
         return rs;
+    }
+
+    @ApiOperation("保存方案")
+    @PostMapping("/saveScheme")
+    public BaseResponse saveScheme(@Valid @RequestBody SaveSchemeReq req) {
+        if (CollectionUtils.isEmpty(req.getVaccineDetailIdList())) {
+            throw new BusinessException("疫苗ID为空");
+        }
+        boolean rs = service.saveScheme(req.getBabyId(), req.getSchemeType(),
+                req.getProvinceId(), req.getVaccineDetailIdList());
+        if (rs) {
+            return BaseResponse.success("保存成功");
+        }
+        return BaseResponse.failed("保存失败");
     }
 
 }

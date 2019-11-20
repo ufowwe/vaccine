@@ -17,7 +17,7 @@ import java.util.List;
  **/
 public class CodeGenerator {
 
-    public static final String[] TABLE_ARR = new String[] { "v_user", "", "v_baby", "v_vaccine_scheme", "v_user_baby", "", "", "", "", "", "", "", "", "" };
+    public static final String[] TABLE_ARR = new String[] { "v_baby", "v_user", "v_user_baby", "v_vaccine_record", "v_vaccine_scheme", "", "", "", "", "", "", "", "", "" };
 
     /**
      * <p>

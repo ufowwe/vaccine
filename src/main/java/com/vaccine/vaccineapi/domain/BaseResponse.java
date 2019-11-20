@@ -69,6 +69,13 @@ public class BaseResponse {
         return failed(EnumResponseCode.ERROR, message, data);
     }
 
+    public static BaseResponse result(boolean result, String message) {
+        if (result) {
+            return success(message);
+        }
+        return failed(message);
+    }
+
     /**
      * 登录过期、未登录用户
      * @param message
