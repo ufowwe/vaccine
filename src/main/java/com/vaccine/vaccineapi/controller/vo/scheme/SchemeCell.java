@@ -21,11 +21,17 @@ public class SchemeCell {
     @ApiModelProperty(value = "剂次")
     private Integer times;
 
+    @ApiModelProperty(value = "接种年龄")
+    private String vaccinationAge;
+
     @ApiModelProperty(value = "最小月")
     private Integer monthNumS;
 
-    @ApiModelProperty(value = "最大约")
+    @ApiModelProperty(value = "最大月")
     private Integer monthNumE;
+
+    @ApiModelProperty(value = "免疫程序，1：基础免疫；2：加强免疫")
+    private Integer immunityProgram;
 
     @ApiModelProperty(value = "选取状态，0：未选择；1：已选择")
     private Integer status;

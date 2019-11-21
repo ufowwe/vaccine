@@ -19,8 +19,10 @@ public class GetSchemeDTO {
     private BigDecimal price;
     private Long vaccineSchemeId;
     private Integer times;
+    private String vaccinationAge;
     private Integer monthNumS;
     private Integer monthNumE;
+    private Integer immunityProgram;
     private Integer status;
     private Integer schemeType;
     private Integer provinceId;

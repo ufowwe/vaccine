@@ -11,8 +11,10 @@
         <result property="price" column="price"/>
         <result property="vaccineSchemeId" column="vaccine_scheme_id"/>
         <result property="times" column="times"/>
+        <result property="vaccinationAge" column="vaccination_age"/>
         <result property="monthNumS" column="month_num_s"/>
         <result property="monthNumE" column="month_num_e"/>
+        <result property="immunityProgram" column="immunity_program"/>
         <result property="status" column="status"/>
         <result property="schemeType" column="scheme_type"/>
         <result property="provinceId" column="province_id"/>
@@ -26,7 +28,7 @@
 
     <select id="getScheme" resultMap="getSchemeDTO">
         select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant, vvd.disease_num, vvp.price,
-            vvs.id vaccine_scheme_id, vvs.times, vvs.month_num_s, vvs.month_num_e, vvs.status, vvs.scheme_type, vvs.province_id
+            vvs.id vaccine_scheme_id, vvs.times, vvs.vaccination_age, vvs.month_num_s, vvs.month_num_e, vvs.immunity_program, vvs.status, vvs.scheme_type, vvs.province_id
         from v_vaccine_scheme vvs
         LEFT JOIN v_vaccine_detail vvd on vvd.id=vvs.vaccine_detail_id
         LEFT JOIN v_vaccine_price vvp on vvp.vaccine_detail_id=vvd.id and vvp.province_id=vvs.province_id

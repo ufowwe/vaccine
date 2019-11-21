@@ -49,11 +49,10 @@ public class VaccineSchemeController {
     @ApiOperation("保存方案")
     @PostMapping("/saveScheme")
     public BaseResponse saveScheme(@Valid @RequestBody SaveSchemeReq req) {
-        if (CollectionUtils.isEmpty(req.getVaccineDetailIdList())) {
-            throw new BusinessException("疫苗ID为空");
+        if (CollectionUtils.isEmpty(req.getVaccineRecordReqList())) {
+            throw new BusinessException("疫苗方案信息为空");
         }
-        boolean rs = service.saveScheme(req.getBabyId(), req.getSchemeType(),
-                req.getProvinceId(), req.getVaccineDetailIdList());
+        boolean rs = service.saveScheme(req.getBabyId(), req.getVaccineRecordReqList());
         if (rs) {
             return BaseResponse.success("保存成功");
         }

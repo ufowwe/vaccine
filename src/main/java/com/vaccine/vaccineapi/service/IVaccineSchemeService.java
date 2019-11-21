@@ -2,6 +2,7 @@ package com.vaccine.vaccineapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
+import com.vaccine.vaccineapi.controller.vo.scheme.VaccineRecordReq;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 
 import java.util.List;
@@ -25,9 +26,10 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
 
     /**
      * 保存方案
-     * @param schemeType
+     * @param babyId
+     * @param vaccineRecordReqList
      * @return
      */
-    boolean saveScheme(Long babyId, Integer schemeType, Long provinceId, List<Long> vaccineDetailIdList);
+    boolean saveScheme(Long babyId, List<VaccineRecordReq> vaccineRecordReqList);
 
 }

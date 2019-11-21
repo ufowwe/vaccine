@@ -2,10 +2,7 @@ package com.vaccine.vaccineapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeCell;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeVaccineInfo;
+import com.vaccine.vaccineapi.controller.vo.scheme.*;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.Baby;
 import com.vaccine.vaccineapi.entity.VaccineRecord;
@@ -74,8 +71,10 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             cell.setVaccineDetailId(schemeDTO.getVaccineDetailId());
             cell.setVaccineSchemeId(schemeDTO.getVaccineSchemeId());
             cell.setTimes(schemeDTO.getTimes());
+            cell.setVaccinationAge(schemeDTO.getVaccinationAge());
             cell.setMonthNumS(schemeDTO.getMonthNumS());
             cell.setMonthNumE(schemeDTO.getMonthNumE());
+            cell.setImmunityProgram(schemeDTO.getImmunityProgram());
             cell.setStatus(schemeDTO.getStatus());
             cell.setSchemeType(schemeDTO.getSchemeType());
             cell.setProvinceId(schemeDTO.getProvinceId());
@@ -130,46 +129,55 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
     }
 
     @Override
-    public boolean saveScheme(Long babyId, Integer schemeType, Long provinceId, List<Long> vaccineDetailIdList) {
-        QueryWrapper<VaccineScheme> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(VaccineScheme::getVaccineDetailId, vaccineDetailIdList);
-        List<VaccineScheme> vaccineSchemeList = getBaseMapper().selectList(queryWrapper);
-        if (CollectionUtils.isEmpty(vaccineSchemeList)) {
-            return false;
-        }
+    public boolean saveScheme(Long babyId, List<VaccineRecordReq> vaccineRecordReqList) {
         //查询宝宝信息
         Baby baby = babyService.getById(babyId);
         LocalDateTime birthday = baby.getBirthday();
+        LocalDateTime birthdayTemp = null;
         VaccineRecord record = null;
         List<VaccineRecord> recordList = new ArrayList<>();
-        for (VaccineScheme scheme : vaccineSchemeList) {
+        for (VaccineRecordReq recordReq : vaccineRecordReqList) {
+            birthdayTemp = birthday;
             record = new VaccineRecord();
-            scheme.setId(null);
-            BeanUtil.copyProperties(scheme, record);
+            BeanUtil.copyProperties(recordReq, record);
             record.setBabyId(babyId);
-            record.setSchemeType(schemeType);
-            record.setProvinceId(provinceId);
-            record.setStatus(1);
             //计算推荐接种时间
-            int month = (int) scheme.getMonthNumS().doubleValue();
+            int month = (int) recordReq.getMonthNumS().doubleValue();
             //如果相等，则month为整数，否则为小数，小数都为0.5，按15天计算
-            if (scheme.getMonthNumS().doubleValue() == month) {
-                birthday.plusMonths(month);
-            } else {
-                birthday.plusMonths(month);
-                birthday.plusDays(15);
+            birthdayTemp = birthdayTemp.plusMonths(month);
+            if (recordReq.getMonthNumS().doubleValue() != month) {
+                birthdayTemp = birthdayTemp.plusDays(15);
             }
-            record.setVaccinationDate(birthday);
+            record.setVaccinationDate(birthdayTemp);
             record.setVaccinationStatus(0);
-
             recordList.add(record);
         }
+        List<VaccineRecord> vaccineRecordList = getByBabyId(babyId);
+        if (!CollectionUtils.isEmpty(vaccineRecordList)) {
+            //如果已存在，则删除
+            deleteByBabyId(babyId);
+        }
         return vaccineRecordService.saveBatch(recordList);
+    }
+
+    private List<VaccineRecord> getByBabyId(Long babyId) {
+        QueryWrapper<VaccineRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(VaccineRecord::getBabyId, babyId);
+        return vaccineRecordService.getBaseMapper().selectList(queryWrapper);
+    }
+
+    private void deleteByBabyId(Long babyId) {
+        QueryWrapper<VaccineRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(VaccineRecord::getBabyId, babyId);
+        vaccineRecordService.remove(queryWrapper);
     }
 
     public static void main(String[] args) {
         Double a = 6.0;
         int b = (int)a.doubleValue();
+        System.out.println(a == b);
+        a = 6.5;
+        b = (int)a.doubleValue();
         System.out.println(a == b);
     }
 
