@@ -1,9 +1,9 @@
 package com.vaccine.vaccineapi.controller;
 
 
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
-import com.vaccine.vaccineapi.domain.BaseResponse;
-import com.vaccine.vaccineapi.service.IVaccineSchemeBaseService;
+import com.vaccine.vaccineapi.controller.vo.record.VaccineRecordInfo;
+import com.vaccine.vaccineapi.domain.BaseResponsePlus;
+import com.vaccine.vaccineapi.service.IVaccineSchemeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -29,18 +28,15 @@ import java.util.List;
 public class BeforeLoginController {
 
     @Resource
-    private IVaccineSchemeBaseService service;
+    private IVaccineSchemeService vaccineSchemeService;
 
-    @ApiOperation("获取接种证集合")
-    @PostMapping("/getSchemeBase")
-    public BaseResponse getSchemeBase() {
-        boolean rs = true;
-        List<SchemeInfo> schemeInfoList = service.getSchemeBaseNoBaby();
-        if (rs) {
-            return BaseResponse.success("查询成功", schemeInfoList);
-        } else {
-            return BaseResponse.failed("查询失败", schemeInfoList);
-        }
+    @ApiOperation("获取接种证集合，未登录")
+    @PostMapping("/getRecordNoLogin")
+    public BaseResponsePlus<VaccineRecordInfo> getRecordNoLogin() {
+        VaccineRecordInfo recordNoLogin = vaccineSchemeService.getRecordNoLogin(0, 1);
+        BaseResponsePlus<VaccineRecordInfo> rs = new BaseResponsePlus<>();
+        rs.success("查询成功", recordNoLogin);
+        return rs;
     }
 
 }

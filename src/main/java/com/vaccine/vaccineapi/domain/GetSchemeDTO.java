@@ -16,6 +16,7 @@ public class GetSchemeDTO {
     private String sameEffect;
     private String relevant;
     private Integer diseaseNum;
+    private Integer freeStatus;
     private BigDecimal price;
     private Long vaccineSchemeId;
     private Integer times;

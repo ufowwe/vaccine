@@ -1,6 +1,7 @@
 package com.vaccine.vaccineapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.vaccine.vaccineapi.controller.vo.record.VaccineRecordInfo;
 import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.controller.vo.scheme.VaccineRecordReq;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
@@ -31,5 +32,12 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
      * @return
      */
     boolean saveScheme(Long babyId, List<VaccineRecordReq> vaccineRecordReqList);
+
+    /**
+     * 查询未登录、没有有宝宝时的接种证
+     * @param schemeType
+     * @return
+     */
+    VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId);
 
 }

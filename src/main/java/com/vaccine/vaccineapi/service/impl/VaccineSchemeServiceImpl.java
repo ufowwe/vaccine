@@ -2,6 +2,11 @@ package com.vaccine.vaccineapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.vaccine.vaccineapi.controller.vo.record.VaccineRecordDetail;
+import com.vaccine.vaccineapi.controller.vo.record.VaccineRecordGroup;
+import com.vaccine.vaccineapi.controller.vo.record.VaccineRecordInfo;
 import com.vaccine.vaccineapi.controller.vo.scheme.*;
 import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.Baby;
@@ -17,10 +22,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -170,6 +172,49 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         QueryWrapper<VaccineRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(VaccineRecord::getBabyId, babyId);
         vaccineRecordService.remove(queryWrapper);
+    }
+
+    @Override
+    public VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId) {
+        return getRecordNoLoginBase(schemeType, provinceId);
+    }
+
+    private VaccineRecordInfo getRecordNoLoginBase(Integer schemeType, Integer provinceId) {
+//        List<VaccineScheme> vaccineSchemeList = getBySchemeTypeAndProvinceId(schemeType, provinceId);
+        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
+        //统计每个疫苗的总剂次数
+        Map<Long, Integer> timesMap = new HashMap<>();
+        for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
+            if (timesMap.get(vaccineScheme.getVaccineDetailId()) == null) {
+                timesMap.put(vaccineScheme.getVaccineDetailId(), 0);
+            }
+            timesMap.put(vaccineScheme.getVaccineDetailId(), timesMap.get(vaccineScheme.getVaccineDetailId()) + 1);
+        }
+        Multimap<String, VaccineRecordDetail> rsMap = ArrayListMultimap.create();
+        VaccineRecordDetail detail = null;
+        for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
+            detail = new VaccineRecordDetail();
+            detail.setName(vaccineScheme.getVaccineName());
+            detail.setFreeStatus(vaccineScheme.getFreeStatus());
+            detail.setCurrTimes(vaccineScheme.getTimes());
+            detail.setTotalTimes(timesMap.get(vaccineScheme.getVaccineDetailId()));
+            rsMap.put(vaccineScheme.getVaccinationAge(), detail);
+        }
+        VaccineRecordInfo vaccineRecordInfo = new VaccineRecordInfo();
+        VaccineRecordGroup group = null;
+        for (String age : rsMap.keySet()) {
+            group = new VaccineRecordGroup();
+            group.setVaccinationAge(age);
+            group.setVaccineRecordDetailList(rsMap.get(age));
+            vaccineRecordInfo.getVaccineRecordGroupList().add(group);
+        }
+        return vaccineRecordInfo;
+    }
+
+    private List<VaccineScheme> getBySchemeTypeAndProvinceId(Integer schemeType, Integer provinceId) {
+        QueryWrapper<VaccineScheme> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(VaccineScheme::getSchemeType, schemeType).eq(VaccineScheme::getProvinceId, provinceId);
+        return getBaseMapper().selectList(queryWrapper);
     }
 
     public static void main(String[] args) {
