@@ -36,15 +36,6 @@
         where vvs.scheme_type=#{schemeType} and vvs.province_id=#{provinceId}
     </select>
 
-    <select id="getRecordNoLoginBase" resultMap="getSchemeDTO">
-        select vvs.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant, vvd.disease_num, vvd.free_status, vvp.price,
-            vvs.id vaccine_scheme_id, vvs.times, vvs.vaccination_age, vvs.month_num_s, vvs.month_num_e, vvs.immunity_program, vvs.status, vvs.scheme_type, vvs.province_id
-        from v_vaccine_scheme vvs
-        LEFT JOIN v_vaccine_detail vvd on vvd.id=vvs.vaccine_detail_id
-        LEFT JOIN v_vaccine_price vvp on vvp.vaccine_detail_id=vvd.id and vvp.province_id=vvs.province_id
-        where vvs.scheme_type=#{schemeType} and vvs.province_id=#{provinceId} order by month_num_s
-    </select>
-
     <select id="getHospitalTimes" resultType="Integer">
         select count(1) hospitalTimes
         from (select vaccine_detail_id from v_vaccine_scheme

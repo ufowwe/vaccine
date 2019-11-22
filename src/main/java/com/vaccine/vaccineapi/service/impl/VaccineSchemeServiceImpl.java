@@ -181,7 +181,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 
     private VaccineRecordInfo getRecordNoLoginBase(Integer schemeType, Integer provinceId) {
 //        List<VaccineScheme> vaccineSchemeList = getBySchemeTypeAndProvinceId(schemeType, provinceId);
-        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getRecordNoLoginBase(schemeType, provinceId);
+        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
         //统计每个疫苗的总剂次数
         Map<Long, Integer> timesMap = new HashMap<>();
         for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
