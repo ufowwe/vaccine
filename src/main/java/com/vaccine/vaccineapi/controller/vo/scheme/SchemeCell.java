@@ -25,10 +25,10 @@ public class SchemeCell {
     private String vaccinationAge;
 
     @ApiModelProperty(value = "最小月")
-    private Integer monthNumS;
+    private Double monthNumS;
 
     @ApiModelProperty(value = "最大月")
-    private Integer monthNumE;
+    private Double monthNumE;
 
     @ApiModelProperty(value = "免疫程序，1：基础免疫；2：加强免疫")
     private Integer immunityProgram;

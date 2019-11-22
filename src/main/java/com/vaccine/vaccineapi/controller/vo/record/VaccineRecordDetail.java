@@ -20,6 +20,9 @@ public class VaccineRecordDetail {
     @ApiModelProperty(value = "免费标识，1：一类，免费；2：二类，不免费")
     private Integer freeStatus;
 
+    @ApiModelProperty(value = "对应开始月数")
+    private Double monthNumS;
+
     @ApiModelProperty(value = "当前第几剂次")
     private Integer currTimes;
 

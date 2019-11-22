@@ -181,7 +181,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 
     private VaccineRecordInfo getRecordNoLoginBase(Integer schemeType, Integer provinceId) {
 //        List<VaccineScheme> vaccineSchemeList = getBySchemeTypeAndProvinceId(schemeType, provinceId);
-        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
+        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getRecordNoLoginBase(schemeType, provinceId);
         //统计每个疫苗的总剂次数
         Map<Long, Integer> timesMap = new HashMap<>();
         for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
@@ -196,18 +196,23 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             detail = new VaccineRecordDetail();
             detail.setName(vaccineScheme.getVaccineName());
             detail.setFreeStatus(vaccineScheme.getFreeStatus());
+            detail.setMonthNumS(vaccineScheme.getMonthNumS());
             detail.setCurrTimes(vaccineScheme.getTimes());
             detail.setTotalTimes(timesMap.get(vaccineScheme.getVaccineDetailId()));
-            rsMap.put(vaccineScheme.getVaccinationAge(), detail);
+            rsMap.put(vaccineScheme.getVaccinationAge() + "," +vaccineScheme.getMonthNumS(), detail);
         }
         VaccineRecordInfo vaccineRecordInfo = new VaccineRecordInfo();
         VaccineRecordGroup group = null;
         for (String age : rsMap.keySet()) {
             group = new VaccineRecordGroup();
-            group.setVaccinationAge(age);
+            String[] ageArr = age.split(",");
+            group.setVaccinationAge(ageArr[0]);
+            group.setMonthNumS(Double.valueOf(ageArr[1]));
             group.setVaccineRecordDetailList(rsMap.get(age));
             vaccineRecordInfo.getVaccineRecordGroupList().add(group);
         }
+        vaccineRecordInfo.getVaccineRecordGroupList().sort((o1, o2)->o1.getMonthNumS().compareTo(o2.getMonthNumS()));
+//        vaccineRecordInfo.getVaccineRecordGroupList().sort(Comparator.comparing(VaccineRecordGroup::getMonthNumS));
         return vaccineRecordInfo;
     }
 

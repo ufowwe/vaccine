@@ -21,8 +21,8 @@ public class GetSchemeDTO {
     private Long vaccineSchemeId;
     private Integer times;
     private String vaccinationAge;
-    private Integer monthNumS;
-    private Integer monthNumE;
+    private Double monthNumS;
+    private Double monthNumE;
     private Integer immunityProgram;
     private Integer status;
     private Integer schemeType;
