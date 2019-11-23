@@ -40,4 +40,12 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
      */
     VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId);
 
+    /**
+     * 查询登录后的接种证
+     * @param schemeType
+     * @return
+     */
+    VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Integer provinceId);
+
+
 }

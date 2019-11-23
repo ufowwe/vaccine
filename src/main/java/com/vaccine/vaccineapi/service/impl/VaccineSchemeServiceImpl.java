@@ -13,9 +13,7 @@ import com.vaccine.vaccineapi.entity.Baby;
 import com.vaccine.vaccineapi.entity.VaccineRecord;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeMapper;
-import com.vaccine.vaccineapi.service.IBabyService;
-import com.vaccine.vaccineapi.service.IVaccineRecordService;
-import com.vaccine.vaccineapi.service.IVaccineSchemeService;
+import com.vaccine.vaccineapi.service.*;
 import com.vaccine.vaccineapi.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -40,6 +38,12 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 
     @Resource
     private IBabyService babyService;
+
+    @Resource
+    private IUserBabyService userBabyService;
+
+    @Resource
+    private IUserService userService;
 
     @Override
     public SchemeInfo getScheme(Integer schemeType, Integer provinceId) {
@@ -177,6 +181,27 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
     @Override
     public VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId) {
         return getRecordNoLoginBase(schemeType, provinceId);
+    }
+
+    @Override
+    public VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Integer provinceId) {
+        /*QueryWrapper<UserBaby> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserBaby::getUserId, userService.getUserId());
+        List<UserBaby> userBabyList = userBabyService.getBaseMapper().selectList(queryWrapper);
+        if (CollectionUtils.isEmpty(userBabyList)) {*/
+        if (babyId == null) {
+            //无宝宝，返回全部疫苗
+            return getRecordNoLoginBase(schemeType, provinceId);
+        }
+        //有宝宝，则判断是否已生成宝宝出生到当前年龄可打疫苗，如果无则先生成
+        QueryWrapper<VaccineRecord> recordQueryWrapper = new QueryWrapper<>();
+        recordQueryWrapper.lambda().eq(VaccineRecord::getBabyId, babyId);
+        Integer recordNum = vaccineRecordService.getBaseMapper().selectCount(recordQueryWrapper);
+        if (recordNum != null && recordNum > 0) {
+
+        }
+
+        return null;
     }
 
     private VaccineRecordInfo getRecordNoLoginBase(Integer schemeType, Integer provinceId) {
