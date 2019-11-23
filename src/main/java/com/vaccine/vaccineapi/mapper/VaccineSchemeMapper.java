@@ -25,6 +25,8 @@ public interface VaccineSchemeMapper extends BaseMapper<VaccineScheme> {
      */
     List<GetSchemeDTO> getScheme(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
 
+    List<GetSchemeDTO> getRecord(@Param("babyId") Long babyId);
+
     Integer getHospitalTimes(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
 
     Integer getTotalDosageNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);

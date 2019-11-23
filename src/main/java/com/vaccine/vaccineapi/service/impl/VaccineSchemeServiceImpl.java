@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -180,7 +181,8 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
 
     @Override
     public VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId) {
-        return getRecordNoLoginBase(schemeType, provinceId);
+        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
+        return getRecordBase(vaccineSchemeList);
     }
 
     @Override
@@ -190,23 +192,51 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         List<UserBaby> userBabyList = userBabyService.getBaseMapper().selectList(queryWrapper);
         if (CollectionUtils.isEmpty(userBabyList)) {*/
         if (babyId == null) {
-            //无宝宝，返回全部疫苗
-            return getRecordNoLoginBase(schemeType, provinceId);
+            //无宝宝，和未登录相同返回全部疫苗
+            return getRecordNoLogin(schemeType, provinceId);
         }
-        //有宝宝，则判断是否已生成宝宝出生到当前年龄可打疫苗，如果无则先生成
+        //有宝宝，则判断是否已生成宝宝出生到当前年龄可打疫苗，如果有则直接返回，如果无则生成
         QueryWrapper<VaccineRecord> recordQueryWrapper = new QueryWrapper<>();
         recordQueryWrapper.lambda().eq(VaccineRecord::getBabyId, babyId);
         Integer recordNum = vaccineRecordService.getBaseMapper().selectCount(recordQueryWrapper);
         if (recordNum != null && recordNum > 0) {
-
+            //存在接种记录，则直接查询并返回
+            List<GetSchemeDTO> recordList = getBaseMapper().getRecord(babyId);
+            return getRecordBase(recordList);
         }
-
-        return null;
+        //不存在接种记录，需要生成并返回
+        Baby baby = babyService.getById(babyId);
+        //宝宝生日距今多少个月
+        Long monthInterval = baby.getBirthday().toLocalDate().until(LocalDateTime.now().toLocalDate(), ChronoUnit.MONTHS);
+        List<VaccineScheme> vaccineSchemeList = getBySchemeTypeAndProvinceIdAndMonthS(1,
+                baby.getVaccineProvinceId(), monthInterval.doubleValue());
+        LocalDateTime birthday = baby.getBirthday();
+        LocalDateTime birthdayTemp = null;
+        VaccineRecord record = null;
+        List<VaccineRecord> recordList = new ArrayList<>();
+        for (VaccineScheme scheme : vaccineSchemeList) {
+            birthdayTemp = birthday;
+            record = new VaccineRecord();
+            BeanUtil.copyProperties(scheme, record);
+            record.setBabyId(babyId);
+            //计算推荐接种时间
+            int month = (int) scheme.getMonthNumS().doubleValue();
+            //如果相等，则month为整数，否则为小数，小数都为0.5，按15天计算
+            birthdayTemp = birthdayTemp.plusMonths(month);
+            if (scheme.getMonthNumS().doubleValue() != month) {
+                birthdayTemp = birthdayTemp.plusDays(15);
+            }
+            record.setVaccinationDate(birthdayTemp);
+            record.setVaccinationStatus(0);
+            recordList.add(record);
+        }
+        vaccineRecordService.saveBatch(recordList);
+        //存在接种记录，则直接查询并返回
+        List<GetSchemeDTO> records = getBaseMapper().getRecord(babyId);
+        return getRecordBase(records);
     }
 
-    private VaccineRecordInfo getRecordNoLoginBase(Integer schemeType, Integer provinceId) {
-//        List<VaccineScheme> vaccineSchemeList = getBySchemeTypeAndProvinceId(schemeType, provinceId);
-        List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
+    private VaccineRecordInfo getRecordBase(List<GetSchemeDTO> vaccineSchemeList) {
         //统计每个疫苗的总剂次数
         Map<Long, Integer> timesMap = new HashMap<>();
         for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
@@ -224,6 +254,8 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
             detail.setMonthNumS(vaccineScheme.getMonthNumS());
             detail.setCurrTimes(vaccineScheme.getTimes());
             detail.setTotalTimes(timesMap.get(vaccineScheme.getVaccineDetailId()));
+            detail.setVaccinationDate(vaccineScheme.getVaccinationDate());
+            detail.setVaccinationStatus(vaccineScheme.getVaccinationStatus());
             rsMap.put(vaccineScheme.getVaccinationAge() + "," +vaccineScheme.getMonthNumS(), detail);
         }
         VaccineRecordInfo vaccineRecordInfo = new VaccineRecordInfo();
@@ -241,9 +273,17 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         return vaccineRecordInfo;
     }
 
-    private List<VaccineScheme> getBySchemeTypeAndProvinceId(Integer schemeType, Integer provinceId) {
+    private List<VaccineScheme> getBySchemeTypeAndProvinceId(Integer schemeType, Long provinceId) {
         QueryWrapper<VaccineScheme> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(VaccineScheme::getSchemeType, schemeType).eq(VaccineScheme::getProvinceId, provinceId);
+        return getBaseMapper().selectList(queryWrapper);
+    }
+
+    private List<VaccineScheme> getBySchemeTypeAndProvinceIdAndMonthS(Integer schemeType, Long provinceId, Double monthNumS) {
+        QueryWrapper<VaccineScheme> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(VaccineScheme::getSchemeType, schemeType)
+                .eq(VaccineScheme::getProvinceId, provinceId)
+                .eq(VaccineScheme::getMonthNumS, monthNumS);
         return getBaseMapper().selectList(queryWrapper);
     }
 

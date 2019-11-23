@@ -19,6 +19,8 @@
         <result property="status" column="status"/>
         <result property="schemeType" column="scheme_type"/>
         <result property="provinceId" column="province_id"/>
+        <result property="vaccinationDate" column="vaccination_date"/>
+        <result property="vaccinationStatus" column="vaccination_status"/>
     </resultMap>
 
     <resultMap type="com.vaccine.vaccineapi.controller.vo.scheme.SchemeColumn" id="schemeColumn">
@@ -34,6 +36,16 @@
         LEFT JOIN v_vaccine_detail vvd on vvd.id=vvs.vaccine_detail_id
         LEFT JOIN v_vaccine_price vvp on vvp.vaccine_detail_id=vvd.id and vvp.province_id=vvs.province_id
         where vvs.scheme_type=#{schemeType} and vvs.province_id=#{provinceId}
+    </select>
+
+    <select id="getRecord" resultMap="getSchemeDTO">
+        select vvr.vaccine_detail_id, vvd.name vaccine_name, vvd.same_effect, vvd.relevant, vvd.disease_num, vvd.free_status, vvp.price,
+            vvr.id vaccine_scheme_id, vvr.times, vvr.vaccination_age, vvr.month_num_s, vvr.month_num_e, vvr.immunity_program, vvr.status,
+            vvr.scheme_type, vvr.province_id, vvr.vaccination_date, vvr.vaccination_status
+        from v_vaccine_record vvr
+        LEFT JOIN v_vaccine_detail vvd on vvd.id=vvr.vaccine_detail_id
+        LEFT JOIN v_vaccine_price vvp on vvp.vaccine_detail_id=vvd.id and vvp.province_id=vvr.province_id
+        where vvr.baby_id=#{babyId}
     </select>
 
     <select id="getHospitalTimes" resultType="Integer">

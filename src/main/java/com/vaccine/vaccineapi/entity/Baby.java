@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author admin
- * @since 2019-11-08
+ * @since 2019-11-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -75,6 +75,9 @@ public class Baby implements Serializable {
 
     @ApiModelProperty(value = "接种点")
     private String vaccineAddress;
+
+    @ApiModelProperty(value = "接种省")
+    private Long vaccineProvinceId;
 
     @ApiModelProperty(value = "接种单位")
     private Long vaccineStationId;

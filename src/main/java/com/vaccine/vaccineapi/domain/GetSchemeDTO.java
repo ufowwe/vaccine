@@ -3,6 +3,7 @@ package com.vaccine.vaccineapi.domain;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @author hongye.lv
@@ -27,5 +28,7 @@ public class GetSchemeDTO {
     private Integer status;
     private Integer schemeType;
     private Integer provinceId;
+    private LocalDateTime vaccinationDate;
+    private Integer vaccinationStatus;
 
 }
