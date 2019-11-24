@@ -12,6 +12,7 @@ import com.vaccine.vaccineapi.domain.GetSchemeDTO;
 import com.vaccine.vaccineapi.entity.Baby;
 import com.vaccine.vaccineapi.entity.VaccineRecord;
 import com.vaccine.vaccineapi.entity.VaccineScheme;
+import com.vaccine.vaccineapi.exception.BusinessException;
 import com.vaccine.vaccineapi.mapper.VaccineSchemeMapper;
 import com.vaccine.vaccineapi.service.*;
 import com.vaccine.vaccineapi.utils.BeanUtil;
@@ -50,6 +51,9 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
     public SchemeInfo getScheme(Integer schemeType, Long babyId) {
         Baby baby = babyService.getById(babyId);
         Long provinceId = baby.getVaccineProvinceId();
+        if (provinceId == null) {
+            throw new BusinessException("请先维护宝宝所在地");
+        }
         SchemeInfo schemeInfo = new SchemeInfo();
         List<GetSchemeDTO> schemeList = getBaseMapper().getScheme(schemeType, provinceId);
         List<SchemeVaccineInfo> list = new ArrayList<>();
