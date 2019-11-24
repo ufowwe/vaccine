@@ -19,11 +19,18 @@ import java.util.List;
 public interface IVaccineSchemeService extends IService<VaccineScheme> {
 
     /**
-     * 查询系统预设方案
+     * 查询系统预设方案登录后
      * @param schemeType
      * @return
      */
     SchemeInfo getScheme(Integer schemeType, Long babyId);
+
+    /**
+     * 查询系统预设方案
+     * @param schemeType
+     * @return
+     */
+    SchemeInfo getSchemeBase(Integer schemeType, Long provinceId);
 
     /**
      * 保存方案

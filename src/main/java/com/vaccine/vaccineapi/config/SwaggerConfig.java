@@ -42,7 +42,8 @@ public class SwaggerConfig {
             .paths(Predicates.or(PathSelectors.regex("/api/.*"),
                 PathSelectors.regex("/login"),
                 PathSelectors.regex("/beforeLogin/getRecordNoLogin"),
-                PathSelectors.regex("/app/version/need/upgrade")))
+                PathSelectors.regex("/beforeLogin/getSchemeNoLogin"),
+                PathSelectors.regex("/test")))
             .build()
             .globalOperationParameters(pars)
             .apiInfo(apiInfo());

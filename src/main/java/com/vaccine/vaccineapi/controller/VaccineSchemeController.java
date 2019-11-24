@@ -37,9 +37,9 @@ public class VaccineSchemeController {
     @Resource
     private IVaccineSchemeService service;
 
-    @ApiOperation("获取基础方案")
+    @ApiOperation("获取基础方案，已登录")
     @PostMapping("/getScheme")
-    public BaseResponsePlus<SchemeInfo> getSchemeBase(@Valid @RequestBody GetSchemeReq req) {
+    public BaseResponsePlus<SchemeInfo> getScheme(@Valid @RequestBody GetSchemeReq req) {
         SchemeInfo schemeInfo = service.getScheme(req.getSchemeType(), req.getBabyId());
         BaseResponsePlus<SchemeInfo> rs = new BaseResponsePlus<>();
         rs.success("查询成功", schemeInfo);

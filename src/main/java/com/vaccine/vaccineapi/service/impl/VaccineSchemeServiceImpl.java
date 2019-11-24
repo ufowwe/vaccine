@@ -54,6 +54,11 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         if (provinceId == null) {
             throw new BusinessException("请先维护宝宝所在地");
         }
+        return getSchemeBase(schemeType, provinceId);
+    }
+
+    @Override
+    public SchemeInfo getSchemeBase(Integer schemeType, Long provinceId) {
         SchemeInfo schemeInfo = new SchemeInfo();
         List<GetSchemeDTO> schemeList = getBaseMapper().getScheme(schemeType, provinceId);
         List<SchemeVaccineInfo> list = new ArrayList<>();
