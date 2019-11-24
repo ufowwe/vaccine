@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @ApiModel(value = "接种证明细")
 public class VaccineRecordDetail {
 
+    @ApiModelProperty(value = "ID")
+    private Long vaccineSchemeId;
+
     @ApiModelProperty(value = "疫苗名称")
     private String name;
 

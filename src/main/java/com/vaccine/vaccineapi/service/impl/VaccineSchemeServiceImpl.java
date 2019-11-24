@@ -249,6 +249,7 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
         VaccineRecordDetail detail = null;
         for (GetSchemeDTO vaccineScheme : vaccineSchemeList) {
             detail = new VaccineRecordDetail();
+            detail.setVaccineSchemeId(vaccineScheme.getVaccineSchemeId());
             detail.setName(vaccineScheme.getVaccineName());
             detail.setFreeStatus(vaccineScheme.getFreeStatus());
             detail.setMonthNumS(vaccineScheme.getMonthNumS());

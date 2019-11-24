@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class VaccineRecordServiceImpl extends ServiceImpl<VaccineRecordMapper, VaccineRecord> implements IVaccineRecordService {
 
+    @Override
+    public boolean updateRecord(VaccineRecord record) {
+        return updateById(record);
+    }
 }

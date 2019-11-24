@@ -1,7 +1,6 @@
 package com.vaccine.vaccineapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.vaccine.vaccineapi.controller.vo.scheme.SchemeInfo;
 import com.vaccine.vaccineapi.entity.VaccineRecord;
 
 /**
@@ -14,6 +13,6 @@ import com.vaccine.vaccineapi.entity.VaccineRecord;
  */
 public interface IVaccineRecordService extends IService<VaccineRecord> {
 
-
+    boolean updateRecord(VaccineRecord record);
 
 }

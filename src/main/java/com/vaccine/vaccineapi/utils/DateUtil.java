@@ -61,6 +61,9 @@ public class DateUtil {
     }
 
     public static LocalDateTime dateToLocalDateTime(Date time) {
+        if (time == null) {
+            return null;
+        }
         Instant instant = time.toInstant();
         ZoneId zone = ZoneId.systemDefault();
         return LocalDateTime.ofInstant(instant, zone);
