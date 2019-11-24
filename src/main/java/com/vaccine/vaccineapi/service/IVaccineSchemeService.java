@@ -23,7 +23,7 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
      * @param schemeType
      * @return
      */
-    SchemeInfo getScheme(Integer schemeType, Integer provinceId);
+    SchemeInfo getScheme(Integer schemeType, Long babyId);
 
     /**
      * 保存方案
@@ -38,14 +38,14 @@ public interface IVaccineSchemeService extends IService<VaccineScheme> {
      * @param schemeType
      * @return
      */
-    VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId);
+    VaccineRecordInfo getRecordNoLogin(Integer schemeType, Long provinceId);
 
     /**
      * 查询登录后的接种证
      * @param schemeType
      * @return
      */
-    VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Integer provinceId);
+    VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Long provinceId);
 
 
 }

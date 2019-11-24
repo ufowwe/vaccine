@@ -45,7 +45,7 @@ public class VaccineRecordController {
     @ApiOperation("获取接种证集合，已登录")
     @PostMapping("/getRecord")
     public BaseResponsePlus<VaccineRecordInfo> getRecord(@Valid @RequestBody GetRecordReq req) {
-        VaccineRecordInfo recordNoLogin = vaccineSchemeService.getRecord(req.getBabyId(), 0, 1);
+        VaccineRecordInfo recordNoLogin = vaccineSchemeService.getRecord(req.getBabyId(), 0, 1l);
         BaseResponsePlus<VaccineRecordInfo> rs = new BaseResponsePlus<>();
         rs.success("查询成功", recordNoLogin);
         return rs;

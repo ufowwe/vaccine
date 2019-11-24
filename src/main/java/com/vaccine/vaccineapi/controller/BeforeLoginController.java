@@ -33,7 +33,7 @@ public class BeforeLoginController {
     @ApiOperation("获取接种证集合，未登录")
     @PostMapping("/getRecordNoLogin")
     public BaseResponsePlus<VaccineRecordInfo> getRecordNoLogin() {
-        VaccineRecordInfo recordNoLogin = vaccineSchemeService.getRecordNoLogin(0, 1);
+        VaccineRecordInfo recordNoLogin = vaccineSchemeService.getRecordNoLogin(0, 1l);
         BaseResponsePlus<VaccineRecordInfo> rs = new BaseResponsePlus<>();
         rs.success("查询成功", recordNoLogin);
         return rs;

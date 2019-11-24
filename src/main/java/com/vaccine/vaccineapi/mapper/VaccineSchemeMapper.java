@@ -23,18 +23,18 @@ public interface VaccineSchemeMapper extends BaseMapper<VaccineScheme> {
      * @param schemeType
      * @return
      */
-    List<GetSchemeDTO> getScheme(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    List<GetSchemeDTO> getScheme(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
     List<GetSchemeDTO> getRecord(@Param("babyId") Long babyId);
 
-    Integer getHospitalTimes(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    Integer getHospitalTimes(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
-    Integer getTotalDosageNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    Integer getTotalDosageNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
-    Integer getVaccineNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    Integer getVaccineNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
-    Integer getDiseaseNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    Integer getDiseaseNum(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
-    List<SchemeColumn> getColumn(@Param("schemeType") Integer schemeType, @Param("provinceId") Integer provinceId);
+    List<SchemeColumn> getColumn(@Param("schemeType") Integer schemeType, @Param("provinceId") Long provinceId);
 
 }

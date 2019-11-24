@@ -47,7 +47,9 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
     private IUserService userService;
 
     @Override
-    public SchemeInfo getScheme(Integer schemeType, Integer provinceId) {
+    public SchemeInfo getScheme(Integer schemeType, Long babyId) {
+        Baby baby = babyService.getById(babyId);
+        Long provinceId = baby.getVaccineProvinceId();
         SchemeInfo schemeInfo = new SchemeInfo();
         List<GetSchemeDTO> schemeList = getBaseMapper().getScheme(schemeType, provinceId);
         List<SchemeVaccineInfo> list = new ArrayList<>();
@@ -180,13 +182,13 @@ public class VaccineSchemeServiceImpl extends ServiceImpl<VaccineSchemeMapper, V
     }
 
     @Override
-    public VaccineRecordInfo getRecordNoLogin(Integer schemeType, Integer provinceId) {
+    public VaccineRecordInfo getRecordNoLogin(Integer schemeType, Long provinceId) {
         List<GetSchemeDTO> vaccineSchemeList = getBaseMapper().getScheme(schemeType, provinceId);
         return getRecordBase(vaccineSchemeList);
     }
 
     @Override
-    public VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Integer provinceId) {
+    public VaccineRecordInfo getRecord(Long babyId, Integer schemeType, Long provinceId) {
         /*QueryWrapper<UserBaby> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UserBaby::getUserId, userService.getUserId());
         List<UserBaby> userBabyList = userBabyService.getBaseMapper().selectList(queryWrapper);
